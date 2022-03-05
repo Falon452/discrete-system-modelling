@@ -1,1 +1,1 @@
-1. Game Of life - modified to rain simulation
+lab1 Game Of life - modified to rain simulation
