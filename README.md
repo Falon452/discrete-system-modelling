@@ -1,2 +1,2 @@
-- lab1 -  Game Of Life modified to rain simulation
+- lab1 -  Game Of Life modified to *rain simulation*
 - lab2
