@@ -18,3 +18,18 @@
 
 <img src="https://user-images.githubusercontent.com/64365037/159801904-e9819ee6-365e-4d00-96ed-5a617b986b3d.png" width="600" height="100" />
 
+
+- lab5 - crowd 
+
+evaucation start
+
+<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evaucation_start.png" width="600" height="100" />
+
+evaucation mid
+
+<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evaucation_mid.png" width="600" height="100" />
+
+evaucation end
+
+<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuation_end.png" width="600" height="100" />
+
