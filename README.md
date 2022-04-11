@@ -23,13 +23,13 @@
 
 evaucation start
 
-<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evaucation_start.png" width="600" height="100" />
+<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evaucation_start.png" width="600" height="400" />
 
 evaucation mid
 
-<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evaucation_mid.png" width="600" height="100" />
+<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evaucation_mid.png" width="600" height="400" />
 
 evaucation end
 
-<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuation_end.png" width="600" height="100" />
+<img src="https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuation_end.png" width="600" height="400" />
 
