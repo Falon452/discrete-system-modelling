@@ -35,8 +35,8 @@ evaucation end
 
 - lab6 - extended lab5 crowd, adding random move (as act of panic), adding fire and the smoke and its expansion. People are moving 3 times slower in smoke because they are crawling
 
-<img src=https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuationFire.png width="600" height="400" />
+<img src=https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuationFire.png width="600" height="800" />
 
-<img src=https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuationFireMid.png width="600" height="400" />
+<img src=https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuationFireMid.png width="600" height="800" />
 
-<img src=https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuationFireEnd.png width="600" height="400" />
+<img src=https://github.com/Falon452/discrete-system-modelling/blob/master/lab5-crowd/crowd/evacuationFireEnd.png width="600" height="800" />
