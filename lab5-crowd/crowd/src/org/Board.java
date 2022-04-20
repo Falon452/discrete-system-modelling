@@ -15,8 +15,9 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 	private static final long serialVersionUID = 1L;
 	private Point[][] points;
 	private int size = 10;
-	public int editType=0;
+	public CellTypes editType= CellTypes.AIR;
     public Neighbourhood neighbourhood = Neighbourhood.Moore;
+    private int iterationNumber = 0;
 
 
 	public Board(int length, int height) {
@@ -29,12 +30,37 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 
 	public void iteration() {
         for (int x = 1; x < points.length - 1; ++x)
-            for (int y = 1; y < points[x].length - 1; ++y)
+            for (int y = 1; y < points[x].length - 1; ++y) {
                 points[x][y].blocked = false;
+                points[x][y].blockedSmoke = false;
+            }
 
 		for (int x = 1; x < points.length - 1; ++x)
-			for (int y = 1; y < points[x].length - 1; ++y)
-				points[x][y].move();
+			for (int y = 1; y < points[x].length - 1; ++y) {
+
+                if (points[x][y].smoked) {
+                    if (iterationNumber % 2 == 0)
+                        points[x][y].move();
+                } else {
+                    points[x][y].move();
+                }
+            }
+
+        if (iterationNumber % 4 == 3) {
+            for (int x = 1; x < points.length - 1; ++x)
+                for (int y = 1; y < points[x].length - 1; ++y)
+                    points[x][y].moveSmoke();
+        }
+
+        if (iterationNumber % 18 == 17) {
+            for (int x = 1; x < points.length - 1; ++x)
+                for (int y = 1; y < points[x].length - 1; ++y) {
+                    points[x][y].moveFire();
+                }
+            clear();  // calculate field
+        }
+
+        iterationNumber += 1;
 		this.repaint();
 	}
 
@@ -69,7 +95,6 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
             for (int y = 0; y < points[x].length; ++y)
                 points[x][y].clearNeighbours();
 
-
         for (int x = 1; x < points.length-1; ++x) {
             for (int y = 1; y < points[x].length-1; ++y) {
                 switch (neighbourhood) {
@@ -82,18 +107,12 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 	
 	private void calculateField(){
         ArrayList<Point> toCheck = new ArrayList<Point>();
+        // set static field of exits to 0
         for (int x = 0; x < points.length; ++x)
             for (int y = 0; y < points[x].length; ++y)
-                if (points[x][y].type == 2) {
+                if (points[x][y].type == CellTypes.EXIT) {
                     points[x][y].staticField = 0;
                     toCheck.addAll(points[x][y].neighbors);
-                }
-        for (int x = 0; x < points.length; ++x)
-            for (int y = 0; y < points[x].length; ++y)
-                if (points[x][y].type == 1) {
-                    for (Point nei: points[x][y].neighbors) {
-                        nei.staticField +=1;
-                    }
                 }
 
         while (!toCheck.isEmpty()) {
@@ -104,19 +123,6 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
             toCheck.remove(0);
         }
 
-        for (int x = 0; x < points.length; ++x)
-            for (int y = 0; y < points[x].length; ++y)
-                if (points[x][y].type == 1) {
-                    for (Point nei: points[x][y].neighbors) {
-                        if (nei.type == 3) {
-                            nei.staticField += 1;
-                            for (Point nei2: nei.neighbors) {
-                                if (nei2.type == 3)
-                                    nei2.staticField += 1;
-                            }
-                        }
-                    }
-                }
 	}
     private void initializeMoore(Integer x, Integer y) {
         points[x][y].addNeighbor(points[x-1][y-1]);
@@ -167,7 +173,7 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 
 		for (x = 1; x < points.length-1; ++x) {
 			for (y = 1; y < points[x].length-1; ++y) {
-				if(points[x][y].type==0){
+				if(points[x][y].type== CellTypes.AIR){
 					float staticField = points[x][y].staticField;
 					float intensity = staticField/100;
 
@@ -175,17 +181,25 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 						intensity = 1.0f;
 					}
 
-					g.setColor(new Color(intensity, intensity,intensity ));
+					g.setColor(new Color(1.0f - intensity,1.0f - intensity,1.0f - intensity ));
 				}
-				else if (points[x][y].type==1){
+
+                if (points[x][y].smoked) {
+                    g.setColor(new Color(0f, 0f, 0f));
+                }
+                if (points[x][y].type==CellTypes.WALL){
 					g.setColor(new Color(1.0f, 0.0f, 0.0f, 0.7f));
 				}
-				else if (points[x][y].type==2){
+				if (points[x][y].type==CellTypes.EXIT){
 					g.setColor(new Color(0.0f, 1.0f, 0.0f, 0.7f));
 				}
 				if (points[x][y].isPedestrian){
 					g.setColor(new Color(0.0f, 0.0f, 1.0f, 0.7f));
 				}
+                if (points[x][y].type == CellTypes.FIRE) {
+                    g.setColor(new Color(0.88f, 0.34f, 0.13f, 1f));
+                }
+
 				g.fillRect((x * size) + 1, (y * size) + 1, (size - 1), (size - 1));
 			}
 		}
@@ -196,11 +210,14 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 		int x = e.getX() / size;
 		int y = e.getY() / size;
 		if ((x < points.length) && (x > 0) && (y < points[x].length) && (y > 0)) {
-			if(editType==3){
+			if(editType==CellTypes.PERSON){
 				points[x][y].isPedestrian=true;
 			}
 			else{
 				points[x][y].type= editType;
+                if (editType == CellTypes.FIRE) {
+                    points[x][y].smoked = true;
+                }
 			}
 			this.repaint();
 		}
@@ -216,11 +233,14 @@ public class Board extends JComponent implements MouseInputListener, ComponentLi
 		int x = e.getX() / size;
 		int y = e.getY() / size;
 		if ((x < points.length) && (x > 0) && (y < points[x].length) && (y > 0)) {
-			if(editType==3){
+			if(editType==CellTypes.PERSON){
 				points[x][y].isPedestrian=true;
 			}
 			else{
 				points[x][y].type= editType;
+                if (editType == CellTypes.FIRE) {
+                    points[x][y].smoked = true;
+                }
 			}
 			this.repaint();
 		}
